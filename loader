@@ -1,0 +1,510 @@
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local UI = Instance.new("ScreenGui")
+local UI_2 = Instance.new("Frame")
+local Container = Instance.new("Frame")
+local Padding = Instance.new("UIPadding")
+local UnderLine = Instance.new("Frame")
+local ClickTP = Instance.new("TextButton")
+local Fly = Instance.new("TextButton")
+local InfiniteJump = Instance.new("TextButton")
+local JP100 = Instance.new("TextButton")
+local Smallgui = Instance.new("TextButton")
+local Window = Instance.new("TextLabel")
+local ClickTP_2 = Instance.new("TextButton")
+local Credits = Instance.new("TextLabel")
+
+--Properties:
+
+UI.Name = "UI"
+UI.Parent = game.CoreGui
+UI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+UI_2.Name = "UI"
+UI_2.Parent = UI
+UI_2.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+UI_2.BorderSizePixel = 0
+UI_2.Position = UDim2.new(0, 591, 0, 246)
+UI_2.Size = UDim2.new(0, 190, 0, 26)
+UI_2.Active = true
+UI_2.Draggable = true
+
+Container.Name = "Container"
+Container.Parent = UI_2
+Container.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Container.BorderSizePixel = 0
+Container.Position = UDim2.new(0, 0, 0.961538434, 0)
+Container.Size = UDim2.new(0, 190, 0, 206)
+
+Padding.Name = "Padding"
+Padding.Parent = Container
+Padding.PaddingLeft = UDim.new(0, 10)
+Padding.PaddingTop = UDim.new(0, 5)
+
+UnderLine.Name = "UnderLine"
+UnderLine.Parent = Container
+UnderLine.BackgroundColor3 = Color3.fromRGB(85, 170, 0)
+UnderLine.BorderSizePixel = 0
+UnderLine.Position = UDim2.new(-0.055555556, 0, -0.019900497, -1)
+UnderLine.Size = UDim2.new(1.05555558, 0, -2.96540514e-10, 1)
+
+ClickTP.Name = "Click TP"
+ClickTP.Parent = UI_2
+ClickTP.BackgroundColor3 = Color3.fromRGB(113, 113, 113)
+ClickTP.Position = UDim2.new(0.573684216, 0, 6.07692289, 0)
+ClickTP.Size = UDim2.new(0, 73, 0, 24)
+ClickTP.Font = Enum.Font.SourceSans
+ClickTP.Text = "Build Tools"
+ClickTP.TextColor3 = Color3.fromRGB(85, 170, 0)
+ClickTP.TextSize = 14.000
+ClickTP.MouseButton1Down:connect(function()
+	local tool1 = Instance.new("HopperBin",game.Players.LocalPlayer.Backpack)
+	local tool2 = Instance.new("HopperBin",game.Players.LocalPlayer.Backpack)
+	local tool3 = Instance.new("HopperBin",game.Players.LocalPlayer.Backpack)
+	local tool4 = Instance.new("HopperBin",game.Players.LocalPlayer.Backpack)
+	local tool5 = Instance.new("HopperBin",game.Players.LocalPlayer.Backpack)
+	tool1.BinType = "Clone"
+	tool2.BinType = "GameTool"
+	tool3.BinType = "Hammer"
+	tool4.BinType = "Script"
+	tool5.BinType = "Grab"
+end)
+
+Fly.Name = "Fly"
+Fly.Parent = UI_2
+Fly.BackgroundColor3 = Color3.fromRGB(113, 113, 113)
+Fly.Position = UDim2.new(0.573684216, 0, 1.46153843, 0)
+Fly.Size = UDim2.new(0, 73, 0, 24)
+Fly.Font = Enum.Font.SourceSans
+Fly.Text = "Fly"
+Fly.TextColor3 = Color3.fromRGB(85, 170, 0)
+Fly.TextSize = 14.000
+Fly.MouseButton1Down:connect(function()
+	repeat wait() 
+	until game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:findFirstChild("Head") and game.Players.LocalPlayer.Character:findFirstChild("Humanoid") 
+	local mouse = game.Players.LocalPlayer:GetMouse() 
+	repeat wait() until mouse
+	local plr = game.Players.LocalPlayer 
+	local torso = plr.Character.Head 
+	local flying = false
+	local deb = true 
+	local ctrl = {f = 0, b = 0, l = 0, r = 0} 
+	local lastctrl = {f = 0, b = 0, l = 0, r = 0} 
+	local maxspeed = 400 
+	local speed = 5000 
+
+	function Fly() 
+		local bg = Instance.new("BodyGyro", torso) 
+		bg.P = 9e4 
+		bg.maxTorque = Vector3.new(9e9, 9e9, 9e9) 
+		bg.cframe = torso.CFrame 
+		local bv = Instance.new("BodyVelocity", torso) 
+		bv.velocity = Vector3.new(0,0.1,0) 
+		bv.maxForce = Vector3.new(9e9, 9e9, 9e9) 
+		repeat wait() 
+			plr.Character.Humanoid.PlatformStand = true 
+			if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then 
+				speed = speed+.5+(speed/maxspeed) 
+				if speed > maxspeed then 
+					speed = maxspeed 
+				end 
+			elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then 
+				speed = speed-1 
+				if speed < 0 then 
+					speed = 0 
+				end 
+			end 
+			if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then 
+				bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed 
+				lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r} 
+			elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then 
+				bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed 
+			else 
+				bv.velocity = Vector3.new(0,0.1,0) 
+			end 
+			bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0) 
+		until not flying 
+		ctrl = {f = 0, b = 0, l = 0, r = 0} 
+		lastctrl = {f = 0, b = 0, l = 0, r = 0} 
+		speed = 0 
+		bg:Destroy() 
+		bv:Destroy() 
+		plr.Character.Humanoid.PlatformStand = false 
+	end 
+	mouse.KeyDown:connect(function(key) 
+		if key:lower() == "e" then 
+			if flying then flying = false 
+			else 
+				flying = true 
+				Fly() 
+			end 
+		elseif key:lower() == "w" then 
+			ctrl.f = 1 
+		elseif key:lower() == "s" then 
+			ctrl.b = -1 
+		elseif key:lower() == "a" then 
+			ctrl.l = -1 
+		elseif key:lower() == "d" then 
+			ctrl.r = 1 
+		end 
+	end) 
+	mouse.KeyUp:connect(function(key) 
+		if key:lower() == "w" then 
+			ctrl.f = 0 
+		elseif key:lower() == "s" then 
+			ctrl.b = 0 
+		elseif key:lower() == "a" then 
+			ctrl.l = 0 
+		elseif key:lower() == "d" then 
+			ctrl.r = 0 
+		end 
+	end)
+	Fly()
+end)
+
+InfiniteJump.Name = "Infinite Jump"
+InfiniteJump.Parent = UI_2
+InfiniteJump.BackgroundColor3 = Color3.fromRGB(113, 113, 113)
+InfiniteJump.Position = UDim2.new(0.573684216, 0, 3.84615374, 0)
+InfiniteJump.Size = UDim2.new(0, 73, 0, 24)
+InfiniteJump.Font = Enum.Font.SourceSans
+InfiniteJump.Text = "Inf Jump"
+InfiniteJump.TextColor3 = Color3.fromRGB(85, 170, 0)
+InfiniteJump.TextSize = 14.000
+InfiniteJump.MouseButton1Down:connect(function()
+	local Player = game:GetService'Players'.LocalPlayer;
+	local UIS = game:GetService'UserInputService';
+
+	_G.JumpHeight = 50;
+
+	function Action(Object, Function) if Object ~= nil then Function(Object); end end
+
+	UIS.InputBegan:connect(function(UserInput)
+		if UserInput.UserInputType == Enum.UserInputType.Keyboard and UserInput.KeyCode == Enum.KeyCode.Space then
+			Action(Player.Character.Humanoid, function(self)
+				if self:GetState() == Enum.HumanoidStateType.Jumping or self:GetState() == Enum.HumanoidStateType.Freefall then
+					Action(self.Parent.HumanoidRootPart, function(self)
+						self.Velocity = Vector3.new(0, _G.JumpHeight, 0);
+					end)
+				end
+			end)
+		end
+	end) 
+end)
+
+JP100.Name = "JP 100"
+JP100.Parent = UI_2
+JP100.BackgroundColor3 = Color3.fromRGB(113, 113, 113)
+JP100.Position = UDim2.new(0.0421052575, 0, 3.84615374, 0)
+JP100.Size = UDim2.new(0, 73, 0, 24)
+JP100.Font = Enum.Font.SourceSans
+JP100.Text = "JP 100"
+JP100.TextColor3 = Color3.fromRGB(85, 170, 0)
+JP100.TextSize = 14.000
+JP100.MouseButton1Down:connect(function()
+	local plr = game.Players.LocalPlayer
+
+	plr.Character.Humanoid.JumpPower = 100
+end)
+
+Smallgui.Name = "Small gui"
+Smallgui.Parent = UI_2
+Smallgui.BackgroundColor3 = Color3.fromRGB(113, 113, 113)
+Smallgui.Position = UDim2.new(0.042105265, 0, 1.46153843, 0)
+Smallgui.Size = UDim2.new(0, 73, 0, 24)
+Smallgui.Font = Enum.Font.SourceSans
+Smallgui.Text = "Add Small Gui"
+Smallgui.TextColor3 = Color3.fromRGB(85, 170, 0)
+Smallgui.TextSize = 14.000
+Smallgui.MouseButton1Down:connect(function()
+	local ScreenGui = Instance.new("ScreenGui")
+	local OpenF = Instance.new("Frame")
+	local OpenB = Instance.new("TextButton")
+	local MainF = Instance.new("Frame")
+	local Title = Instance.new("TextLabel")
+	local AutoFarm = Instance.new("TextButton")
+	local Noclip = Instance.new("TextButton")
+	local WalkSpeed = Instance.new("TextButton")
+	local Close = Instance.new("TextButton")
+	--Properties:
+	ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+	ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	ScreenGui.Parent = game.CoreGui
+
+	OpenF.Name = "OpenF"
+	OpenF.Parent = ScreenGui
+	OpenF.Active = true
+	OpenF.BackgroundColor3 = Color3.new(0, 0, 0)
+	OpenF.BackgroundTransparency = 0.40000000596046
+	OpenF.Position = UDim2.new(0.92768085, 0, 0.626178563, 0)
+	OpenF.Size = UDim2.new(0, 98, 0, 28)
+
+	OpenB.Name = "OpenB"
+	OpenB.Parent = OpenF
+	OpenB.BackgroundColor3 = Color3.new(1, 1, 1)
+	OpenB.BackgroundTransparency = 1
+	OpenB.Position = UDim2.new(0.0102040814, 0, 0.0357142873, 0)
+	OpenB.Size = UDim2.new(0, 103, 0, 25)
+	OpenB.Font = Enum.Font.Gotham
+	OpenB.Text = "Open"
+	OpenB.TextColor3 = Color3.new(1, 1, 1)
+	OpenB.TextSize = 14
+	OpenB.MouseButton1Click:connect(function()
+		OpenF.Visible = false
+		MainF.Visible = true
+	end)
+
+	MainF.Name = "MainF"
+	MainF.Parent = ScreenGui
+	MainF.Active = true
+	MainF.BackgroundColor3 = Color3.new(0, 0, 0)
+	MainF.BackgroundTransparency = 0.40000000596046
+	MainF.Position = UDim2.new(0.369627506, 0, 0.30831641, 0)
+	MainF.Size = UDim2.new(0, 170, 0, 224)
+	MainF.Draggable = True
+
+	Title.Name = "Title"
+	Title.Parent = MainF
+	Title.Active = true
+	Title.BackgroundColor3 = Color3.new(0, 0, 0)
+	Title.BackgroundTransparency = 0.40000000596046
+	Title.Size = UDim2.new(0, 170, 0, 30)
+	Title.Font = Enum.Font.GothamBold
+	Title.Text = "Attack On Zombies"
+	Title.TextColor3 = Color3.new(1, 1, 1)
+	Title.TextSize = 14
+
+	AutoFarm.Name = "AutoFarm"
+	AutoFarm.Parent = MainF
+	AutoFarm.BackgroundColor3 = Color3.new(0, 0, 0)
+	AutoFarm.BackgroundTransparency = 0.40000000596046
+	AutoFarm.Position = UDim2.new(0.0588235334, 0, 0.214285731, 0)
+	AutoFarm.Size = UDim2.new(0, 150, 0, 26)
+	AutoFarm.Font = Enum.Font.Gotham
+	AutoFarm.Text = "Auto Farm"
+	AutoFarm.TextColor3 = Color3.new(1, 1, 1)
+	AutoFarm.TextSize = 14
+	AutoFarm.MouseButton1Click:connect(function()
+		local groundDistance = 8
+		local Player = game:GetService("Players").LocalPlayer
+		local function getNearest()
+			local nearest, dist = nil, 99999
+			for _,v in pairs(game.Workspace.BossFolder:GetChildren()) do
+				if(v:FindFirstChild("Head")~=nil)then
+					local m =(Player.Character.Head.Position-v.Head.Position).magnitude
+					if(m<dist)then
+						dist = m
+						nearest = v
+					end
+				end
+			end
+			for _,v in pairs(game.Workspace.enemies:GetChildren()) do
+				if(v:FindFirstChild("Head")~=nil)then
+					local m =(Player.Character.Head.Position-v.Head.Position).magnitude
+					if(m<dist)then
+						dist = m
+						nearest = v
+					end
+				end
+			end
+			return nearest
+		end
+		_G.farm2 = true
+		Player.Chatted:Connect(function(m)
+			if(m==";autofarm false")then
+				_G.farm2 = false
+			elseif(m==";autofarm true")then
+				_G.farm2 = true
+			end
+		end)
+		_G.globalTarget = nil
+		game:GetService("RunService").RenderStepped:Connect(function()
+			if(_G.farm2==true)then
+				local target = getNearest()
+				if(target~=nil)then
+					game:GetService("Workspace").CurrentCamera.CFrame = CFrame.new(game:GetService("Workspace").CurrentCamera.CFrame.p, target.Head.Position)
+					Player.Character.HumanoidRootPart.CFrame = (target.HumanoidRootPart.CFrame * CFrame.new(0, groundDistance, 9))
+					_G.globalTarget = target
+				end
+			end
+		end)
+		spawn(function()
+			while wait() do
+				game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+				game.Players.LocalPlayer.Character.Torso.Velocity = Vector3.new(0,0,0)
+			end
+		end)
+		while wait() do
+			if(_G.farm2==true and _G.globalTarget~=nil and _G.globalTarget:FindFirstChild("Head") and Player.Character:FindFirstChildOfClass("Tool"))then
+				local target = _G.globalTarget
+				game.ReplicatedStorage.Gun:FireServer({["Normal"] = Vector3.new(0, 0, 0), ["Direction"] = target.Head.Position, ["Name"] = Player.Character:FindFirstChildOfClass("Tool").Name, ["Hit"] = target.Head, ["Origin"] = target.Head.Position, ["Pos"] = target.Head.Position,})
+				wait()
+			end
+		end
+	end)
+
+	Noclip.Name = "Noclip"
+	Noclip.Parent = MainF
+	Noclip.BackgroundColor3 = Color3.new(0, 0, 0)
+	Noclip.BackgroundTransparency = 0.40000000596046
+	Noclip.Position = UDim2.new(0.0588235334, 0, 0.504464269, 0)
+	Noclip.Size = UDim2.new(0, 150, 0, 26)
+	Noclip.Font = Enum.Font.Gotham
+	Noclip.Text = "Noclip [\"n\"]"
+	Noclip.TextColor3 = Color3.new(1, 1, 1)
+	Noclip.TextSize = 14
+	Noclip.MouseButton1Click:connect(function()
+		local plr = game:service'Players'.LocalPlayer
+		local char = plr.Character
+		local hum = char:FindFirstChildOfClass'Humanoid'
+		local mouse = plr:GetMouse()
+		on = false
+
+		mouse.KeyDown:connect(function(key)
+			if key == "n" then
+				if not on then
+					on = true
+				elseif on then
+					on = false
+				end
+			end
+		end)
+
+		while wait() do
+			if char then
+				hum = char:FindFirstChildOfClass'Humanoid'
+			end
+			if on then
+				hum:ChangeState(11)
+			end
+		end
+
+	end)
+
+	WalkSpeed.Name = "WalkSpeed"
+	WalkSpeed.Parent = MainF
+	WalkSpeed.BackgroundColor3 = Color3.new(0, 0, 0)
+	WalkSpeed.BackgroundTransparency = 0.40000000596046
+	WalkSpeed.Position = UDim2.new(0.0588235334, 0, 0.8125, 0)
+	WalkSpeed.Size = UDim2.new(0, 150, 0, 26)
+	WalkSpeed.Font = Enum.Font.Gotham
+	WalkSpeed.Text = "Walkspeed"
+	WalkSpeed.TextColor3 = Color3.new(1, 1, 1)
+	WalkSpeed.TextSize = 14
+	WalkSpeed.MouseButton1Click:connect(function()
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 100
+	end)
+
+	Close.Name = "Close"
+	Close.Parent = MainF
+	Close.BackgroundColor3 = Color3.new(1, 0, 0.0156863)
+	Close.BackgroundTransparency = 1
+	Close.Position = UDim2.new(0.841176391, 0, -0.0223214328, 0)
+	Close.Size = UDim2.new(0, 27, 0, 39)
+	Close.Font = Enum.Font.SourceSans
+	Close.Text = "X"
+	Close.TextColor3 = Color3.new(1, 0, 0.0156863)
+	Close.TextSize = 48
+	Close.MouseButton1Click:connect(function()
+		MainF.Visible = false
+		OpenF.Visible = true
+	end)
+end)
+
+Window.Name = "Window"
+Window.Parent = UI_2
+Window.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Window.BackgroundTransparency = 1.000
+Window.Position = UDim2.new(0, 0, -0.0333337784, 0)
+Window.Size = UDim2.new(1, 0, 1, 0)
+Window.Font = Enum.Font.SourceSans
+Window.Text = "Zombie Attack"
+Window.TextColor3 = Color3.fromRGB(85, 170, 0)
+Window.TextSize = 17.000
+
+ClickTP_2.Name = "Click TP"
+ClickTP_2.Parent = UI_2
+ClickTP_2.BackgroundColor3 = Color3.fromRGB(113, 113, 113)
+ClickTP_2.Position = UDim2.new(0.042105265, 0, 6.07692289, 0)
+ClickTP_2.Size = UDim2.new(0, 73, 0, 24)
+ClickTP_2.Font = Enum.Font.SourceSans
+ClickTP_2.Text = "Click TP"
+ClickTP_2.TextColor3 = Color3.fromRGB(85, 170, 0)
+ClickTP_2.TextSize = 14.000
+ClickTP_2.MouseButton1Down:connect(function()
+	mouse = game.Players.LocalPlayer:GetMouse()
+	tool = Instance.new("Tool")
+	tool.RequiresHandle = false
+	tool.Name = "Click Teleport"
+	tool.Activated:connect(function()
+		local pos = mouse.Hit+Vector3.new(0,2.5,0)
+		pos = CFrame.new(pos.X,pos.Y,pos.Z)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = pos
+	end)
+	tool.Parent = game.Players.LocalPlayer.Backpack
+end)
+
+Credits.Name = "Credits"
+Credits.Parent = UI_2
+Credits.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Credits.BackgroundTransparency = 1.000
+Credits.Position = UDim2.new(0, 0, 7.62051296, 0)
+Credits.Size = UDim2.new(1, 0, 1, 0)
+Credits.Font = Enum.Font.SourceSans
+Credits.Text = "Cobra X#6179"
+Credits.TextColor3 = Color3.fromRGB(85, 170, 0)
+Credits.TextSize = 17.000
+
+-- Scripts:
+
+local function NADBJKE_fake_script() -- UI_2.LocalScript 
+	local script = Instance.new('LocalScript', UI_2)
+
+	local dragger = {}; 
+	local resizer = {};
+	
+	do
+		local mouse = game:GetService("Players").LocalPlayer:GetMouse();
+		local inputService = game:GetService('UserInputService');
+		local heartbeat = game:GetService("RunService").Heartbeat;
+		-- // credits to Ririchi / Inori for this cute drag function :)
+		function dragger.new(frame)
+		    local s, event = pcall(function()
+		    	return frame.MouseEnter
+		    end)
+	
+		    if s then
+		    	frame.Active = true;
+	
+		    	event:connect(function()
+		    		local input = frame.InputBegan:connect(function(key)
+		    			if key.UserInputType == Enum.UserInputType.MouseButton1 then
+		    				local objectPosition = Vector2.new(mouse.X - frame.AbsolutePosition.X, mouse.Y - frame.AbsolutePosition.Y);
+		    				while heartbeat:wait() and inputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
+		    					frame:TweenPosition(UDim2.new(0, mouse.X - objectPosition.X + (frame.Size.X.Offset * frame.AnchorPoint.X), 0, mouse.Y - objectPosition.Y + (frame.Size.Y.Offset * frame.AnchorPoint.Y)), 'Out', 'Quad', 0.1, true);
+		    				end
+		    			end
+		    		end)
+	
+		    		local leave;
+		    		leave = frame.MouseLeave:connect(function()
+		    			input:disconnect();
+		    			leave:disconnect();
+		    		end)
+		    	end)
+		    end
+		end
+		
+		function resizer.new(p, s)
+			p:GetPropertyChangedSignal('AbsoluteSize'):connect(function()
+				s.Size = UDim2.new(s.Size.X.Scale, s.Size.X.Offset, s.Size.Y.Scale, p.AbsoluteSize.Y);
+			end)
+		end
+	end
+	script.Parent.Active = true
+	script.Parent.Draggable = true
+end
+coroutine.wrap(NADBJKE_fake_script)()
